@@ -139,10 +139,9 @@ def main():
                                 "remainder" + "__" + DataMetadata.ID,
                             ],
                         ),
-                        # TODO remove unknown categroies
                         (
                             "OneHot",
-                            OneHotEncoder(handle_unknown="ignore"),
+                            OneHotEncoder(),
                             one_hot_features,
                         ),
                         (

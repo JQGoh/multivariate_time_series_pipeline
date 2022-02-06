@@ -86,7 +86,6 @@ def main():
         TimeSeries.from_series(series) for series in test_target_list
     ]
 
-    # TODO figure out which framework to work on
     regr_model = RegressionModel(
         lags=None, lags_past_covariates=history_count, lags_future_covariates=None
     )
