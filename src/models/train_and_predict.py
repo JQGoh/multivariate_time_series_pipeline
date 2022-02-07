@@ -62,7 +62,7 @@ def main():
     ]
     train_covariates_list = [x.drop(columns=series_id) for _, x in loaded_train_groupby]
     train_covariates_timeseries = [
-        TimeSeries.from_dataframe(df) for i, df in enumerate(train_covariates_list)
+        TimeSeries.from_dataframe(df) for df in train_covariates_list
     ]
 
     # Prepend data to provide sufficient history for test
