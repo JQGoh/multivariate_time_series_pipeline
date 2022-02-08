@@ -4,6 +4,7 @@ import cloudpickle
 import matplotlib.pyplot as plt
 import pandas as pd
 from darts import concatenate
+from darts.metrics import mape
 from darts.models import RegressionModel
 from darts.timeseries import TimeSeries
 
@@ -45,6 +46,16 @@ def main():
     # Separate target and keep the features in loaded_train, test
     train_target = loaded_train[[target_column, series_id]].copy()
     train_covariates = loaded_train.drop(columns=[target_column])
+    future_covariates_columns = [
+        x
+        for x in train_covariates.columns
+        if "__DeriveDatetime__" in x and x != series_id
+    ]
+    past_covariates_columns = [
+        x
+        for x in train_covariates.columns
+        if "__DeriveDatetime__" not in x and x != series_id
+    ]
     test_target = test[[target_column, series_id]].copy()
     test_covariates = test.drop(columns=[target_column])
 
@@ -60,24 +71,47 @@ def main():
     train_target_timeseries = [
         TimeSeries.from_series(series) for series in train_target_list
     ]
-    train_covariates_list = [x.drop(columns=series_id) for _, x in loaded_train_groupby]
-    train_covariates_timeseries = [
-        TimeSeries.from_dataframe(df) for df in train_covariates_list
+    train_past_covariates_list = [
+        x.drop(columns=series_id)[past_covariates_columns]
+        for _, x in loaded_train_groupby
+    ]
+    train_past_covariates_timeseries = [
+        TimeSeries.from_dataframe(df) for df in train_past_covariates_list
+    ]
+    train_future_covariates_list = [
+        x.drop(columns=series_id)[future_covariates_columns]
+        for _, x in loaded_train_groupby
+    ]
+    train_future_covariates_timeseries = [
+        TimeSeries.from_dataframe(df) for df in train_future_covariates_list
     ]
 
     # Prepend data to provide sufficient history for test
     history_count = 1
     predict_count = 20
-    test_covariates_list = [
-        x.drop(columns=series_id) for _, x in test_covariates_groupby
+    test_past_covariates_list = [
+        x.drop(columns=series_id)[past_covariates_columns]
+        for _, x in test_covariates_groupby
     ]
-    test_covariates_list = [
+    test_past_covariates_list = [
         pd.concat([x.tail(history_count), y])
-        for x, y in zip(train_covariates_list, test_covariates_list)
+        for x, y in zip(train_past_covariates_list, test_past_covariates_list)
     ]
-    test_covariates_timeseries = [
-        TimeSeries.from_dataframe(df) for df in test_covariates_list
+    test_past_covariates_timeseries = [
+        TimeSeries.from_dataframe(df) for df in test_past_covariates_list
     ]
+    test_future_covariates_list = [
+        x.drop(columns=series_id)[future_covariates_columns]
+        for _, x in test_covariates_groupby
+    ]
+    test_future_covariates_list = [
+        pd.concat([x.tail(history_count), y])
+        for x, y in zip(train_future_covariates_list, test_future_covariates_list)
+    ]
+    test_future_covariates_timeseries = [
+        TimeSeries.from_dataframe(df) for df in test_future_covariates_list
+    ]
+
     # ground truth
     test_target_list = [
         x.head(predict_count).drop(columns=series_id) for _, x in test_target_groupby
@@ -87,19 +121,34 @@ def main():
     ]
 
     regr_model = RegressionModel(
-        lags=None, lags_past_covariates=history_count, lags_future_covariates=None
+        lags=None,
+        lags_past_covariates=history_count,
+        lags_future_covariates=[0],
     )
     regr_model.fit(
         series=train_target_timeseries,
-        past_covariates=train_covariates_timeseries,
-        future_covariates=None,
+        past_covariates=train_past_covariates_timeseries,
+        future_covariates=train_future_covariates_timeseries,
     )
 
     predictions = regr_model.predict(
         n=predict_count,
         series=train_target_timeseries,
-        past_covariates=test_covariates_timeseries,
+        past_covariates=test_past_covariates_timeseries,
+        future_covariates=test_future_covariates_timeseries,
     )
+    print(
+        "MAPE score for prediction of id1: {}".format(
+            mape(predictions[0], test_target_timeseries[0])
+        )
+    )
+    print(
+        "MAPE score for prediction of id2: {}".format(
+            mape(predictions[1], test_target_timeseries[1])
+        )
+    )
+
+    # Plot the chart
     pred_actual = concatenate(predictions + test_target_timeseries, axis="component")
     pred_actual.plot()
     legend_text = ["prediction: " + x for x in group_keys] + [
