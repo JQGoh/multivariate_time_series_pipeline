@@ -139,12 +139,12 @@ def main():
     )
     print(
         "MAPE score for prediction of id1: {}".format(
-            mape(predictions[0], test_target_timeseries[0])
+            mape(test_target_timeseries[0], predictions[0])
         )
     )
     print(
         "MAPE score for prediction of id2: {}".format(
-            mape(predictions[1], test_target_timeseries[1])
+            mape(test_target_timeseries[1], predictions[1])
         )
     )
 
