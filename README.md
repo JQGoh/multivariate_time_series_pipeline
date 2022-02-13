@@ -1,7 +1,7 @@
 Multivariate Time Series Pipeline
 ==============================
 
-Demonstration of building a configurable multivariate time series pipeline which performs feature engineering for time series forecasting.
+A demonstration of building an interpretable multivariate time series feature engineering pipeline for forecasting.
 
 ## Quick Start
 1. Install the required Python packages. Installation in a virtual environment is recommended, see [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) for an example.
@@ -24,9 +24,12 @@ scripts in sequence:
 
 ## Overview
 This project is inspired by the need of:  
-  * Build a feature engineering pipeline of time series derived features using the [Sklearn pipeline](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html) such that a pipeline can be used repeatedly for feature processing.  
-  * Get a clear idea of the types of transformations performed to obtain the features based on their column names. 
-  * Sklearn pipeline's transformation may shuffle the column order of derived features and thus it is not straight forward to track derived features by reading the matrix values.  
+  * Build a time series feature engineering pipeline using the [Sklearn pipeline](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html) such that the pipeline can be used repeatedly for different use cases with minimal customization.  
+  * Get a clear idea of the types of transformations performed to obtain the features based on the feature names. Sklearn pipeline may also shuffle the column order of derived features upon the transformation and thus it is not straight forward to track the derived features based on the matrix values. The output feature names at pipeline's stages should illustrate the types of transformations performed and the users can then select the relevant intermediate features for further feature processings.  
   * Configure the desired features using a time series feature derivation library such as [tsfresh](https://tsfresh.readthedocs.io/en/latest/) during the intermediate stage of pipeline transformation. The time series derived features in particular focuses on the rolling based feature derivation.
 
-[make_features.py](src/features/make_features.py) file mainly illustrates the time series feature derivation using the constructed pipeline. A number of customized Python class objects are available in [custom_transformers.py](src/features/custom_transformers.py) and [tsfresh_transformers.py](src/features/tsfresh_transformers.py), which leverage [mixin (a simple type of multiple inheritance)](https://www.ianlewis.org/en/mixins-and-python) and [factory method](https://realpython.com/factory-method-python/) to implement the customized pipeline.   
+### Key Ideas
+This project leverages [mixin (a simple type of multiple inheritance)](https://www.ianlewis.org/en/mixins-and-python) and [factory method](https://realpython.com/factory-method-python/) to implement components used in the customized pipeline. The key components include the customized Python class objects in [custom_transformers.py](src/features/custom_transformers.py) and [tsfresh_transformers.py](src/features/tsfresh_transformers.py). The [make_features.py](src/features/make_features.py) file demonstrates the usage of these components to perform time series feature engineering.
+
+
+
