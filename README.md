@@ -29,7 +29,7 @@ This project is inspired by the need of:
   * Configure the desired features using a time series feature derivation library such as [tsfresh](https://tsfresh.readthedocs.io/en/latest/) during the intermediate stage of pipeline transformation. The time series derived features in particular focuses on the rolling based feature derivation.
 
 ### Key Ideas
-This project leverages [mixin (a simple type of multiple inheritance)](https://www.ianlewis.org/en/mixins-and-python) and [factory method](https://realpython.com/factory-method-python/) to implement components used in the customized pipeline. The key components include the customized Python class objects in [custom_transformers.py](src/features/custom_transformers.py) and [tsfresh_transformers.py](src/features/tsfresh_transformers.py). The [make_features.py](src/features/make_features.py) file demonstrates the usage of these components to perform time series feature engineering.
+This project leverages [mixin (multiple inheritance)](https://easyaspython.com/mixins-for-fun-and-profit-cb9962760556) and [factory method](https://realpython.com/factory-method-python/) to implement components used in the customized pipeline. The key components include the customized Python class objects in [custom_transformers.py](src/features/custom_transformers.py) and [tsfresh_transformers.py](src/features/tsfresh_transformers.py). The [make_features.py](src/features/make_features.py) file demonstrates the usage of these components to perform time series feature engineering.
 
 
 
