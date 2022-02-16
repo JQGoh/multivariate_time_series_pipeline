@@ -90,7 +90,6 @@ class TsfreshRollingMixin(object):
                     self.column_sort, self.column_sort
                 )
 
-            # automatically cast the names.... not sure this is a good idea
             self.input_column_names = [
                 self.columns_mapper.get(name, name) for name in self.input_column_names
             ]
