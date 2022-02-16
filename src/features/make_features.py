@@ -39,7 +39,6 @@ def main():
 
     transformer_factory = TransformWithFeatureNamesFactory()
     transformer_factory.register_format("SimpleImputer", SimpleImputer)
-    transformer_factory.register_format("StandardScaler", StandardScaler)
 
     print("Setting imputer, datetime pipeline to impute input feature values")
     pre_imputer_class = "Pre-MedianImputer"
@@ -183,9 +182,7 @@ def main():
             ),
             (
                 "StandardScaler",
-                transformer_factory.get_transformer("StandardScaler")(
-                    names=numeric_names_for_transform,
-                ),
+                StandardScaler(),
             ),
         ]
     )
