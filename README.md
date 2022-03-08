@@ -1,7 +1,7 @@
 Multivariate Time Series Pipeline
 ==============================
 
-A demonstration of building a tractable, feature engineering pipeline for multivariate time series.
+A demonstration of building a tractable, feature engineering pipeline for multivariate time series. Read more in the article [Building a Tractable, Feature Engineering Pipeline for Multivariate Time Seires](https://www.kdnuggets.com/2022/03/building-tractable-feature-engineering-pipeline-multivariate-time-series.html) published on the KDnuggets.
 
 ## Quick Start
 1. Install the required Python packages. Installation in a virtual environment is recommended, see [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) for an example.
