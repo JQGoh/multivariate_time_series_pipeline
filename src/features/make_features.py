@@ -7,17 +7,12 @@ from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
-
 from src.enums import DataMetadata, FilePathEnum
-from src.features.custom_transformers import (
-    DataFrameTransformer,
-    DatetimeFeatureTransformer,
-    TransformWithFeatureNamesFactory,
-)
-from src.features.tsfresh_transformers import (
-    RollingLagsTrasformer,
-    TSFreshRollingTransformer,
-)
+from src.features.custom_transformers import (DataFrameTransformer,
+                                              DatetimeFeatureTransformer,
+                                              TransformWithFeatureNamesFactory)
+from src.features.tsfresh_transformers import (RollingLagsTrasformer,
+                                               TSFreshRollingTransformer)
 
 
 def main():
@@ -37,6 +32,11 @@ def main():
     # raw test set saved for later use
     test.to_csv(FilePathEnum.TEST_DATA, index=None)
 
+    # NOTE: Using scikit-learn==1.0.2, we shall encounter the following AttributeError for
+    # SimpleImputer, without using TransformWithFeatureNamesFactory()
+    # However, newer version such as scikit-learn==1.3.0, we don't need TransformWithFeatureNamesFactory()
+    # AttributeError: Estimator MedianImputer does not provide get_feature_names_out.
+    # Did you mean to call pipeline[:-1].get_feature_names_out()?
     transformer_factory = TransformWithFeatureNamesFactory()
     transformer_factory.register_format("SimpleImputer", SimpleImputer)
 

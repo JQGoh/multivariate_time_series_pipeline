@@ -207,8 +207,9 @@ class RollingLagsTrasformer(BaseEstimator, TransformerMixin, TsfreshRollingMixin
             .nth(-1 * order)
         )
         df_features.set_index(
-            pd.MultiIndex.from_tuples(df_features.index), inplace=True
+            pd.MultiIndex.from_tuples(df_features[TsFreshEnum.ID]), inplace=True
         )
+        df_features.drop(TsFreshEnum.ID, axis="columns", inplace=True)
 
         new_column_names = [
             col + " (lag {})".format(order) for col in df_features.columns
