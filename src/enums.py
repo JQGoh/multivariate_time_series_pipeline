@@ -8,17 +8,27 @@ class FilePathEnum(object):
     DOWNLOADED_ZIP = Path(PROJECT_DIR_POSIX).joinpath(
         "data/raw/household_power_consumption.zip"
     )
-    FIGURE = Path(PROJECT_DIR_POSIX).joinpath("reports/figures/predictions_global_active_power.png")
+    FIGURE = Path(PROJECT_DIR_POSIX).joinpath(
+        "reports/figures/predictions_global_active_power.png"
+    )
     MOCK_DATA = Path(PROJECT_DIR_POSIX).joinpath("data/interim/mock_data.csv")
-    PIPELINE = Path(PROJECT_DIR_POSIX).joinpath("data/processed/data_processing_pipelines.pkl")
+    PIPELINE = Path(PROJECT_DIR_POSIX).joinpath(
+        "data/processed/data_processing_pipelines.pkl"
+    )
+    WITH_DARTS_PIPELINE = Path(PROJECT_DIR_POSIX).joinpath(
+        "data/processed/data_processing_with_darts_pipelines.pkl"
+    )
     TEST_DATA = Path(PROJECT_DIR_POSIX).joinpath("data/processed/test_data.csv")
-    TRAIN_FEATURES = Path(PROJECT_DIR_POSIX).joinpath("data/processed/train_features.csv")
+    TRAIN_FEATURES = Path(PROJECT_DIR_POSIX).joinpath(
+        "data/processed/train_features.csv"
+    )
 
 
 class TsFreshEnum(object):
     # id passed as column_id/the derived feature due to rolling of time series
     ID = "id"
     SORT = "sort"
+
 
 class DataMetadata(object):
     """Data metadata"""
